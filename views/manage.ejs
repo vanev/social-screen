@@ -4,7 +4,7 @@
         <link rel="stylesheet" href="/main.css">
     </head>
     <body>
-        <div class="container" id="images"></div>
+        <div id="manage"></div>
 
         <script src="/jquery.js"></script>
         <script src="/underscore.js"></script>
@@ -13,10 +13,10 @@
         <script src="/socket.io/socket.io.js"></script>
         <script src="/main.jsx" type="text/jsx"></script>
         <script type="text/jsx">
-            var images = <%- JSON.stringify(images) %>;
+            var subscriptions = <%- JSON.stringify(subscriptions) %>;
             React.render(
-                <Images images={images} />,
-                document.getElementById('images')
+                <Manager subscriptions={subscriptions} />,
+                document.getElementById('manage')
             );
         </script>
     </body>

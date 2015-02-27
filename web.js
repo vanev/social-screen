@@ -26,6 +26,15 @@ app.get('/', function (req,res) {
         }
     });
 });
+app.get('/manage', function (req,res) {
+    ig.subscriptions(function (err, subs, remaining, limit) {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.render('manage', { subscriptions: subs });
+        }
+    });
+});
 
 app.post('/incoming', function (req,res) {
     req.body.forEach(function (data) {
@@ -55,7 +64,7 @@ app.get('/subscriptions', function (req,res) {
     });
 });
 
-app.get('/subscriptions/add/:kind/:id', function (req,res) {
+app.post('/subscriptions/add/:kind/:id', function (req,res) {
     var method = ig['add_'+req.params.kind+'_subscription'];
     if (typeof method !== "function") {
         res.status(500);
@@ -70,12 +79,12 @@ app.get('/subscriptions/add/:kind/:id', function (req,res) {
     });
 });
 
-app.get('/subscriptions/remove/:id', function (req,res) {
+app.post('/subscriptions/remove/:id', function (req,res) {
     ig.del_subscription({ id: req.params.id }, function (err, subs, limit) {
         if (err) {
             res.status(500).send(err);
         } else {
-            res.send(subs);
+            res.send({ id: req.params.id });
         }
     });
 });

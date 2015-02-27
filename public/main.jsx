@@ -37,3 +37,93 @@ var Images = React.createClass({
         );
     }
 });
+
+var Subscription = React.createClass({
+    handleClick: function (e) {
+        e.preventDefault();
+        this.props.onRemove(this.props.id);
+    },
+    render: function () {
+        console.log(this.props);
+        return (
+            <div className="subscription">
+                <span className="kind">{this.props.kind}</span>
+                <span className="label">{this.props.label}</span>
+                <button onClick={this.handleClick}>Remove</button>
+            </div>
+        );
+    }
+});
+
+var SubscriptionInput = React.createClass({
+    handleClick: function (e) {
+        e.preventDefault();
+        var label = this.refs.label.getDOMNode().value.trim();
+        var kind = this.refs.kind.getDOMNode().value.trim();
+
+        this.props.onAdd(kind, label);
+
+        this.refs.label.getDOMNode().value = '';
+    },
+    render: function () {
+        return (
+            <div className="subscription-input">
+                <select ref="kind" disabled>
+                    <option>tag</option>
+                </select>
+                <input type="text" ref="label" />
+                <button onClick={this.handleClick}>Add</button>
+            </div>
+        )
+    }
+});
+
+var Manager = React.createClass({
+    handleRemove: function (id) {
+        $.ajax({
+            url: '/subscriptions/remove/'+id,
+            dataType: 'json',
+            type: 'POST',
+            success: function (res) {
+                var subs = _.reject(this.state.subscriptions, function (sub) {
+                    return sub.id === id;
+                });
+                this.setState({ subscriptions: subs });
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(id, status, err.toString());
+            }.bind(this)
+        });
+    },
+    handleSubscriptionAdd: function (kind,label) {
+        $.ajax({
+            url: '/subscriptions/add/'+kind+'/'+label,
+            dataType: 'json',
+            type: 'POST',
+            success: function (res) {
+                var subs = this.state.subscriptions;
+                var new_subs = subs.concat([res]);
+                this.setState({ subscriptions: new_subs });
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(id, status, err.toString());
+            }.bind(this)
+        });
+    },
+    getInitialState: function () {
+        return { subscriptions: this.props.subscriptions };
+    },
+    render: function () {
+        var subNodes = this.state.subscriptions.map(function (data) {
+            return (
+                <Subscription id={data.id} kind={data.object} label={data.object_id} onRemove={this.handleRemove} />
+            );
+        }.bind(this));
+        return (
+            <div className="subscriptions">
+                {subNodes}
+                <SubscriptionInput onAdd={this.handleSubscriptionAdd} />
+            </div>
+        );
+    }
+});
