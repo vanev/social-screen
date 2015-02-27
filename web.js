@@ -92,6 +92,5 @@ http.listen(5000, function () {
 });
 
 function baseUrl (req) {
-    return "https://nnxlkfxclx.localtunnel.me";
-    // return req.protocol + '://' + req.get('host');
+    return req.protocol + '://' + req.get('host');
 }
