@@ -3,9 +3,18 @@
         <title>Social Screen</title>
     </head>
     <body>
-        <div data-images></div>
+        <div id="images"></div>
 
+        <script src="/JSXTransformer.js"></script>
+        <script src="/react.js"></script>
         <script src="/socket.io/socket.io.js"></script>
-        <script src="/main.js"></script>
+        <script src="/main.jsx" type="text/jsx"></script>
+        <script type="text/jsx">
+            var images = <%- JSON.stringify(images) %>;
+            React.render(
+                <Images images={images} />,
+                document.getElementById('images')
+            );
+        </script>
     </body>
 </html>
