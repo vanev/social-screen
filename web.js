@@ -17,7 +17,13 @@ app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
 
 app.get('/', function (req,res) {
-    res.render('index');
+    ig.media_popular(function(err, images) {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.render('index', { images: images });
+        }
+    });
 });
 
 app.post('/incoming', function (req,res) {
@@ -30,7 +36,11 @@ app.post('/incoming', function (req,res) {
     res.send('Thanks!');
 });
 app.get('/incoming', function (req,res) {
-    if (req.query['hub.challenge']) res.send(req.query['hub.challenge']);
+    if (req.query['hub.challenge']) {
+        res.send(req.query['hub.challenge']);
+    } else {
+        res.send('Please send a hub.challenge.');
+    }
 });
 
 
@@ -44,28 +54,13 @@ app.get('/subscriptions', function (req,res) {
     });
 });
 
-app.get('/subscriptions/add/location/:id', function (req,res) {
-    ig.add_location_subscription(req.params.id, baseUrl(req)+'/incoming', function (err, result, remaining, limit) {
-        if (err) {
-            res.status(500).send(err);
-        } else {
-            res.send(result);
-        }
-    });
-});
-
-app.get('/subscriptions/add/tag/:tag', function (req,res) {
-    ig.add_tag_subscription(req.params.tag, baseUrl(req)+'/incoming', function (err, result, remaining, limit) {
-        if (err) {
-            res.status(500).send(err);
-        } else {
-            res.send(result);
-        }
-    });
-});
-
-app.get('/subscriptions/add/user/:id', function (req,res) {
-    ig.add_user_subscription(req.params.id, baseUrl(req)+'/incoming', function (err, result, remaining, limit) {
+app.get('/subscriptions/add/:kind/:id', function (req,res) {
+    var method = ig['add_'+req.params.kind+'_subscription'];
+    if (typeof method !== "function") {
+        res.status(500);
+        return false;
+    }
+    method(req.params.id, baseUrl(req)+'/incoming', function (err, result, remaining, limit) {
         if (err) {
             res.status(500).send(err);
         } else {
@@ -92,10 +87,11 @@ io.on('connection', function (socket) {
     });
 });
 
-http.listen(3000, function () {
-    console.log('listening on *:3000');
+http.listen(5000, function () {
+    console.log('listening on *:5000');
 });
 
 function baseUrl (req) {
-    return req.protocol + '://' + req.get('host');
+    return "https://nnxlkfxclx.localtunnel.me";
+    // return req.protocol + '://' + req.get('host');
 }
