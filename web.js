@@ -2,10 +2,9 @@ var express = require('express'),
     app = express(),
     http = require('http').Server(app),
     io = require('socket.io')(http),
-    ig = require('instagram-node').instagram()
-    bodyParser = require('body-parser'),
-    LOCATIONS = [],
-    TAGS = [];
+    ig = require('instagram-node').instagram(),
+    morgan = require('morgan'),
+    bodyParser = require('body-parser');
 
 ig.use({
     client_id: process.env.INSTAGRAM_CLIENT_ID,
@@ -13,6 +12,7 @@ ig.use({
 });
 
 app.use(bodyParser.json());
+app.use(morgan('dev'));
 app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
 
