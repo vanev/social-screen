@@ -11,7 +11,6 @@ var Images = React.createClass({
     componentDidMount: function () {
         socket.on('new_images', function (images_data) {
             var images = _.reduce(images_data, function (memo,image_data) {
-                console.log(memo);
                 if (!_.contains(memo, image_data)) memo.push(image_data);
                 while (memo.length > this.MAX_COUNT) { memo.shift(); }
                 return memo;
@@ -44,7 +43,6 @@ var Subscription = React.createClass({
         this.props.onRemove(this.props.id);
     },
     render: function () {
-        console.log(this.props);
         return (
             <div className="subscription">
                 <span className="kind">{this.props.kind}</span>
