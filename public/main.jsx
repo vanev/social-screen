@@ -4,6 +4,7 @@ var Images = React.createClass({
     MAX_COUNT: 8,
 
     getInitialState: function () {
+        while (this.props.images.length > this.MAX_COUNT) { this.props.images.shift(); }
         return { images: this.props.images };
     },
 
