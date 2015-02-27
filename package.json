@@ -2,6 +2,7 @@
   "name": "social-screen",
   "version": "0.0.1",
   "description": "",
+  "repository": "git@github.com:vanev/social-screen.git",
   "main": "web.js",
   "scripts": {
     "test": "gulp test"
