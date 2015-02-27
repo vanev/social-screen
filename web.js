@@ -15,6 +15,7 @@ app.use(bodyParser.json());
 app.use(morgan('dev'));
 app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
+app.set('port', (process.env.PORT || 5000));
 
 app.get('/', function (req,res) {
     ig.media_popular(function(err, images) {
@@ -87,8 +88,8 @@ io.on('connection', function (socket) {
     });
 });
 
-http.listen(5000, function () {
-    console.log('listening on *:5000');
+http.listen(app.get('port'), function () {
+    console.log('listening on *:' + app.get('port'));
 });
 
 function baseUrl (req) {
