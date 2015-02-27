@@ -1,0 +1,49 @@
+html,
+body {
+    margin: 0;
+    background-color: #f7f7f7;
+}
+
+img {
+    max-width: 100%;
+}
+p {
+    margin: 0;
+    padding: 10px 15px;
+
+    box-sizing: border-box;
+
+    background-color: rgba(0,0,0,0.25);
+
+    font-family: 'Brandon Text';
+    font-size: 14px;
+    letter-spacing: 0.055em;
+
+    color: white;
+
+    text-align: right;
+}
+.image {
+    position: relative;
+
+    float: left;
+    width: calc(25% - 30px);
+    margin: 15px;
+
+    overflow: hidden;
+}
+.image p {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+.images {
+    width: 100%;
+}
+.images:after {
+    content: "";
+    display: block;
+    clear: both;
+}
