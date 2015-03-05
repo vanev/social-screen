@@ -28,8 +28,8 @@ p {
 .image {
     position: relative;
 
-    float: left;
-    width: calc(25% - 30px);
+    display: inline-block;
+    width: calc(25% - 35px);
     margin: 15px;
 
     overflow: hidden;
@@ -45,6 +45,7 @@ p {
     width: 100%;
     display: table-cell;
     vertical-align: middle;
+    text-align: center;
 }
 .images:after {
     content: "";
