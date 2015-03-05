@@ -58,3 +58,29 @@ p {
     width: 100%;
     height: 100%;
 }
+
+.kind {
+    font-family: 'Helvetica';
+    font-size: 14px;
+    margin-right: 5px;
+}
+.label {
+    font-family: 'Helvetica';
+    font-size: 14px;
+    margin-right: 10px;
+    font-weight: bold;
+}
+select {
+    margin-right: 10px;
+}
+input {
+    margin-right: 10px;
+}
+button {}
+.subscription {
+    margin: 10px;
+}
+.subscription-input {
+    margin: 10px;
+}
+.subscriptions {}
