@@ -4,7 +4,9 @@ var express = require('express'),
     io = require('socket.io')(http),
     ig = require('instagram-node').instagram(),
     morgan = require('morgan'),
-    bodyParser = require('body-parser');
+    bodyParser = require('body-parser'),
+    _ = require('underscore'),
+    async = require('async');
 
 ig.use({
     client_id: process.env.INSTAGRAM_CLIENT_ID,
@@ -18,11 +20,23 @@ app.set('view engine', 'ejs');
 app.set('port', (process.env.PORT || 5000));
 
 app.get('/', function (req,res) {
-    ig.media_popular(function(err, images) {
+    ig.subscriptions(function (err, subs, remaining, limit) {
         if (err) {
             res.status(500).send(err);
         } else {
-            res.render('index', { images: images });
+            async.map(subs, function (data, callback) {
+                var method = ig[data.object+"_media_recent"];
+                method(data.object_id, function (err, medias) {
+                    callback(err, medias);
+                });
+            }, function (err, images) {
+                if (err) {
+                    res.status(500).send(err);
+                } else {
+                    images = _.sortBy(_.flatten(images), function (image) { return image.created_time; });
+                    res.render('index', { images: images });
+                }
+            });
         }
     });
 });
@@ -102,5 +116,6 @@ http.listen(app.get('port'), function () {
 });
 
 function baseUrl (req) {
-    return req.protocol + '://' + req.get('host');
+    return "https://sdwwpvrchh.localtunnel.me";
+    // return req.protocol + '://' + req.get('host');
 }
