@@ -116,6 +116,5 @@ http.listen(app.get('port'), function () {
 });
 
 function baseUrl (req) {
-    return "https://sdwwpvrchh.localtunnel.me";
-    // return req.protocol + '://' + req.get('host');
+    return req.protocol + '://' + req.get('host');
 }
